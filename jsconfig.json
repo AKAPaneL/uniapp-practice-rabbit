@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "types": ["@dcloudio/types", "miniprogram-api-typings", "mini-types"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "rules":{
+    "allowjs":true
+  }
+}
