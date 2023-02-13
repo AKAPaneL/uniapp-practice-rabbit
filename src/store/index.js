@@ -7,6 +7,7 @@ const store = new Vuex.Store({
   plugins:[persistence],
   state: {
     safeAreaInsets:uni.getSystemInfoSync().safeAreaInsets,
+    safeArea:uni.getSystemInfoSync().safeArea,
     buttonArea:uni.getMenuButtonBoundingClientRect()
   },
   getters: {},

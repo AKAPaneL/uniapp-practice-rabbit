@@ -13,13 +13,14 @@
       <view class="scroll-bar">
         <view
           class="scroll-bar-inner"
-          :style="{ transform: `translateX(${scrollLeft})` }"
+          :style="{ left:scrollLeft }"
         ></view>
       </view>
     </view>
   </template>
   
   <script>
+  import { mapState } from 'vuex';
   export default {
     props: ["categoryHeadMutli"],
     data() {
@@ -27,11 +28,15 @@
         scrollLeft: 0,
       };
     },
+    computed:{
+        ...mapState(['safeArea'])
+    },
     methods: {
       handleCategory(e) {
-        const {scrollWidth,scrollLeft} =e.detail
-        console.log(e.detail);
-        // console.log(scrollLeft/scrollWidth);
+        const {scrollLeft} =e.detail
+        let rate =scrollLeft/this.safeArea.width * 80+'%'
+        this.scrollLeft = rate
+        console.log(rate);
       }
     },
   };
@@ -75,7 +80,7 @@
       background-color: #e2e2e2;
       z-index: 200;
       .scroll-bar-inner {
-        width: 50%;
+        width: 20%;
         height: 100%;
         position: absolute;
         left: 0;

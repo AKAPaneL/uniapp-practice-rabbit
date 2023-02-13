@@ -21,6 +21,9 @@ import { mapState } from 'vuex';
 export default {
     computed:{
         ...mapState(['safeAreaInsets'])
+    },
+    created(){
+      console.log(this.safeAreaInsets);
     }
 };
 </script>
