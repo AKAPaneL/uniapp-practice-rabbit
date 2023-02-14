@@ -12,7 +12,7 @@
                         <image mode="aspectFill" class="avatar" :src="profile.avatar"></image>
                     </navigator>
                     <!-- 未登录：点击头像跳转登录页 -->
-                    <navigator v-else url="/pages/login/index" hover-class="none">
+                    <navigator v-else url="/pages/my/profile" hover-class="none">
                         <image class="avatar" src="http://static.botue.com/erabbit/static/uploads/avatar_3.jpg"></image>
                     </navigator>
                     <view class="meta">
