@@ -55,16 +55,20 @@ export default {
     methods:{
         // 添加监听器
         /**
-         * @param {number} distributionSite number:距离视口底部距离多少时触发
+         * @param {number} distributionSite number:距离视口底部距离多少时触发回调
          */
         addObserver(distance){
             this.createIntersectionObserver().relativeToViewport({bottom: distance}).observe('.virtrual-container',this.onEnterViewPort)
         },
-        // 页面进入视图之后的回调函数
+        // 触发的回调函数
         onEnterViewPort:(res)=>{
             const { intersectionRatio } =res
             if(intersectionRatio>0){
-                console.log('触底了,可以请求数据了');
+                // 虚拟列表进入视图
+                this.$emit('onEnterViewPort')
+            }else{
+                // 虚拟列表退出视图
+                this.$emit('onExitViewPort')
             }
         }
     }
