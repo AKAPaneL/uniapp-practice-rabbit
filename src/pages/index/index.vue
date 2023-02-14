@@ -118,7 +118,7 @@ export default {
     },
     data(){
         return {
-            visible:false,
+            visible:true,
             banner:[],
             height:280,
             categoryHeadMutli:[],
@@ -170,7 +170,7 @@ export default {
             this.pageTotal = pages
             this.homeGoodsGuessLike = [...this.homeGoodsGuessLike,...items]
             this.homeGoodsGuessLikeTotal = counts
-            this.visible=false
+            // this.visible=false
         },
         //滚动到底部
         scrolltolower(e){

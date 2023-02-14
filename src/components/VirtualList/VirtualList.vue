@@ -38,11 +38,34 @@ export default {
         visible:{
             type:Boolean,
             default:false
+        },
+        distance:{
+            type:Number,
+            default:0
         }
     },
     data(){
         return {
             
+        }
+    },
+    mounted(){
+        this.addObserver(this.distance)
+    },
+    methods:{
+        // 添加监听器
+        /**
+         * @param {number} distributionSite number:距离视口底部距离多少时触发
+         */
+        addObserver(distance){
+            this.createIntersectionObserver().relativeToViewport({bottom: distance}).observe('.virtrual-container',this.onEnterViewPort)
+        },
+        // 页面进入视图之后的回调函数
+        onEnterViewPort:(res)=>{
+            const { intersectionRatio } =res
+            if(intersectionRatio>0){
+                console.log('触底了,可以请求数据了');
+            }
         }
     }
 }

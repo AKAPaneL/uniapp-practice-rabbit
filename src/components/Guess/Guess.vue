@@ -21,11 +21,11 @@
       </view>
       <VirtualList></VirtualList>
       <!-- 没有更多数据了 -->
-      <!-- <view
+      <view
         class="loading"
         v-if="homeGoodsGuessLikeTotal !== homeGoodsGuessLike.length"
         >正在加载...</view
-      > -->
+      >
     </view>
   </template>
   
