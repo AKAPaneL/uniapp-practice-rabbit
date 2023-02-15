@@ -2,7 +2,7 @@
     <view class="container">
         <!-- 首页banner图片 -->
         <Navbar></Navbar>
-        <scroll-view scroll-y class="main" refresher-enabled @scrolltolower="scrolltolower" @refresherrefresh="refresherrefresh">
+        <scroll-view scroll-y class="main" refresher-enabled @scrolltolower="visible=true"  @refresherrefresh="refresherrefresh">
             <!-- 2.轮播图 -->
             <Carousel :banners="banner" :height="height"></Carousel>
             <!-- 3.分类栏目 -->
@@ -98,7 +98,7 @@
             </view>
             <!-- 7.猜你喜欢 -->
             <Guess :homeGoodsGuessLike="homeGoodsGuessLike" :homeGoodsGuessLikeTotal="homeGoodsGuessLikeTotal"></Guess>
-            <VirtualList :visible="visible"></VirtualList>
+            <VirtualList :visible="visible&&homeGoodsGuessLike.length!==pageTotal" @onEnterViewPort="scrolltolower"></VirtualList>
         </scroll-view>
     </view>
     
@@ -137,9 +137,10 @@ export default {
         this.getHomeNew()
         this.gethomeGoodsGuessLike()
     },
-    
     computed:{
-
+      isVisible(){
+        return this.homeGoodsGuessLike.length!==this.pageTotal&&this.visible
+      }
     },
     methods:{
         // 获取banner图片
@@ -164,17 +165,17 @@ export default {
         },
         //获取猜你喜欢
         async gethomeGoodsGuessLike(){
-            this.visible=true
+            // this.visible=true
             const res = await gethomeGoodsGuessLike({page:this.page,pageSzie:10})
             const {result:{items,pages},counts}  = res
             this.pageTotal = pages
             this.homeGoodsGuessLike = [...this.homeGoodsGuessLike,...items]
             this.homeGoodsGuessLikeTotal = counts
-            // this.visible=false
+            this.visible=false
         },
         //滚动到底部
         scrolltolower(e){
-            
+          console.log(1);
             if(this.page<=this.pageTotal){
                 this.page+=1
                 this.gethomeGoodsGuessLike()

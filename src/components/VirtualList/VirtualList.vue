@@ -1,5 +1,5 @@
 <template>
-  <view v-if="visible" class="virtrual-container" ref="virtrual">
+  <view v-show="visible" class="virtrual-container">
     <view class="first-list card-box">
         <view class="title"></view>
         <view class="content">
@@ -37,7 +37,7 @@ export default {
     props:{
         visible:{
             type:Boolean,
-            default:false
+            default:true
         },
         distance:{
             type:Number,
@@ -61,18 +61,21 @@ export default {
             this.createIntersectionObserver().relativeToViewport({bottom: distance}).observe('.virtrual-container',this.onEnterViewPort)
         },
         // 触发的回调函数
-        onEnterViewPort:(res)=>{
+        onEnterViewPort(res){
             const { intersectionRatio } =res
             if(intersectionRatio>0){
                 // 虚拟列表进入视图
+                console.log('虚拟列表进入视图');
                 this.$emit('onEnterViewPort')
             }else{
                 // 虚拟列表退出视图
+                console.log('虚拟列表退出视图');
                 this.$emit('onExitViewPort')
             }
         }
     }
 }
+
 </script>
 <style scoped lang="scss">
 .virtrual-container{

@@ -19,7 +19,6 @@
           </view>
         </navigator>
       </view>
-      <VirtualList></VirtualList>
       <!-- 没有更多数据了 -->
       <view
         class="loading"
