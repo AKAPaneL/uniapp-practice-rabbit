@@ -4,7 +4,11 @@
 
 <script>
 export default {
-
+  methods:{
+    onTap(){
+      uni.navigateBack()
+    }
+  }
 };
 </script>
 
