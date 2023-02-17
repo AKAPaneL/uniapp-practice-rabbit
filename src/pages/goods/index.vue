@@ -136,7 +136,6 @@
                             <text class="value">{{ item.value }}</text>
                         </view>
                     </view>
-
                     <!-- 商品详情图片 -->
                     <image mode="widthFix" v-for="(item, index) in goods.details.pictures" :key="index" :src="item"></image>
                 </view>
@@ -199,12 +198,24 @@
             </view>
         </uni-popup>
         <!-- SKU -->
+        <vk-data-goods-sku-popup
+            ref="skuPopup"
+            v-model="skuKey" 
+            border-radius="20" 
+            :localdata="goodsInfo"
+            :mode="skuMode"
+            :amount-type="0"
+            @open="onOpenSkuPopup"
+            @close="SkuPopup"
+            @add-cart="addCart"
+            @buy-now="buyNow"
+        ></vk-data-goods-sku-popup>
 </view>
 </template>
   
 
 <script>
-import {getGoodsDetail} from '@/api/goods'
+import {getGoodsDetail,getGoodsRelevant} from '@/api/goods'
 import GoBackBtn from '@/components/GoBackBtn/GoBackBtn.vue';
 import Sku from './components/Sku'
 import Shipment from './components/Shipment'
@@ -229,34 +240,78 @@ export default {
             isShowSku: false,
             // SKU 商品数据
             goodsSku: null,
+             // 是否打开SKU弹窗
+            skuKey:false,
+            // SKU弹窗模式
+            skuMode:1,
+            // 后端返回的商品信息
+            goodsInfo:{}
         };
     },
     computed: {
     // 显示选择好的商品规格信息
-    // selectArrText() {
-    //     console.log(this.$refs.skuRef);
-    //     return this.$refs.skuRef.selectArr.join(" ").trim();
-    // },
+    selectArrText() {
+        console.log(this.$refs.skuPopup);
+        return this.$refs.skuPopup.selectArr.join(" ").trim();
+    },
     },
     onLoad({ id }) {
         this.getGoodsDetail(id);
+        this.getGoodsRelevant()
     },
     methods: {
         // 根据id获取单个商品的详情
         async getGoodsDetail(id) {
             const res = await getGoodsDetail(id);
+            console.log(res);
             this.goods = res.result;
         },
-        openSkuPopup(id){
-            this.showHalfDialog('sku')
+        // 获取同类推荐
+        async getGoodsRelevant(){
+            const res = await getGoodsRelevant({id: this.id, limit: 4 })
+            this.goodsRelevants = res.result;
         },
+
         showHalfDialog(ref){
             this.layer = ref
             this.$refs.popup.open()
         },
         hideHalfDialog(){
             this.$refs.popup.close()
+        },
+        openSkuPopup(type){
+        /**
+         * 获取商品信息
+         * 这里可以看到每次打开SKU都会去重新请求商品信息,为的是每次打开SKU组件可以实时看到剩余库存
+         */
+        // 此处写接口请求，并将返回的数据进行处理成goodsInfo的数据格式，
+        // goodsInfo是后端返回的数据
+        const { id,name,mainPictures,skus,specs} =  this.goods
+        
+        this.goodsInfo = {
+          "_id":id,
+          "name": name,
+          "goods_thumb":mainPictures[0],
+          
+          "sku_list": skus.map(item=>({
+              "_id": item.id,
+              "goods_id": id,
+              "goods_name": name,
+              "image": mainPictures[0],
+              "price": item.price,
+              "sku_name_arr": item.specs.map(v=>v.valueName),
+              "stock": item.inventory
+            })
+        ),
+          "spec_list": specs.map(item=>({
+                    name:item.name,
+                    list:item.values.map(v=>({name:v.name}))
+                })
+            )
         }
+        this.skuMode = type
+        this.skuKey = true;
+      },
     },
     components: { 
         GoBackBtn,

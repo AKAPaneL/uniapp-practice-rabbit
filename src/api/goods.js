@@ -9,3 +9,11 @@ export const getGoodsDetail = (id)=>{
         }
     })
 }
+
+// 获取商品详情页同类推荐
+export function getGoodsRelevant(data){
+    return http({
+        url:'/goods/relevant',
+        data
+    })
+}
