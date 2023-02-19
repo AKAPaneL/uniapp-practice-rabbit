@@ -205,8 +205,7 @@
             :localdata="goodsInfo"
             :mode="skuMode"
             :amount-type="0"
-            @open="onOpenSkuPopup"
-            @close="SkuPopup"
+            @close="onCloseSkuPopup"
             @add-cart="addCart"
             @buy-now="buyNow"
         ></vk-data-goods-sku-popup>
@@ -245,15 +244,12 @@ export default {
             // SKU弹窗模式
             skuMode:1,
             // 后端返回的商品信息
-            goodsInfo:{}
+            goodsInfo:{},
+            selectArrText:''
         };
     },
     computed: {
-    // 显示选择好的商品规格信息
-    selectArrText() {
-        console.log(this.$refs.skuPopup);
-        return this.$refs.skuPopup.selectArr.join(" ").trim();
-    },
+        
     },
     onLoad({ id }) {
         this.getGoodsDetail(id);
@@ -311,7 +307,16 @@ export default {
         }
         this.skuMode = type
         this.skuKey = true;
-      },
+        },
+        onCloseSkuPopup(e){
+            this.selectArrText = this.$refs.skuPopup.selectArr.join(" ").trim();
+        },
+        addCart(e){
+            console.log(e);
+        },
+        buyNow(e){
+            console.log(e);
+        }
     },
     components: { 
         GoBackBtn,
